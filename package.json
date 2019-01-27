@@ -1,0 +1,26 @@
+{
+  "name": "mp-router-interceptor",
+  "version": "0.0.2",
+  "description": "为mpvue提供router插件，为push，replace，switchTab提供beforeEach，afterEach两个常用的路由守卫",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/songbaiTalk/mp-router-interceptor.git"
+  },
+  "author": "liushangyu",
+  "license": "ISC",
+  "keywords": [
+    "mpvue,router,interceptor"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "babel-loader": "^8.0.5",
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.2.0"
+  }
+}
