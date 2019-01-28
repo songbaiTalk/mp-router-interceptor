@@ -59,16 +59,22 @@ export default class mpvueRouter {
    * 脱离页面环境而使用
    */
   push(to) {
-    this.switchRoute(to, wx.navigateTo);
+    (async () => {
+      await this.switchRoute(to, wx.navigateTo);
+    })();
   }
   replace(to) {
-    this.switchRoute(to, wx.redirectTo);
+    (async () => {
+      await this.switchRoute(to, wx.redirectTo);
+    })();
   }
   switchTab(to) {
-    this.switchRoute(to, wx.switchTab);
+    (async () => {
+      await this.switchRoute(to, wx.switchTab);
+    })();
   }
-  switchRoute(to, adaptor) {
-    const next = this.popHooks(to, "before");
+  async switchRoute(to, adaptor) {
+    const next = await this.popHooks(to, "before");
     if (!next) {
       return false;
     } else {
@@ -77,34 +83,35 @@ export default class mpvueRouter {
       };
       adaptor(routeObj);
       this.Class._Vue.prototype.$route.params = to.params;
-      this.popHooks(to, "after");
+      await this.popHooks(to, "after");
       return true;
     }
   }
 
-  popHooks(to, type) {
-    (async () => {
-      const from = this._route;
-      const hookMap = {
-        before: this.beforeHooks,
-        after: this.afterHooks
-      };
-      const hooks = hookMap[type];
-      const next = status => {
-        return status !== false;
-      };
-      var signal = true;
-      hooks.some(hook => {
-        if (type == "before") {
-          signal = hook(to, from, next);
-          return signal == false;
-        } else {
-          hook(to, from);
-          return false;
-        }
-      });
-      return signal;
-    })();
+  async popHooks(to, type) {
+    const from = this._route;
+    const hookMap = {
+      before: this.beforeHooks,
+      after: this.afterHooks
+    };
+    const hooks = hookMap[type];
+    const next = status => {
+      return status !== false;
+    };
+    var signal = true;
+
+    for (let index = 0; index < hooks.length; index++) {
+      if (type == "before") {
+        signal = await hooks[index](to, from, next);
+      } else {
+        await hooks[index](to, from);
+      }
+      if (signal === false) {
+        break;
+      }
+    }
+
+    return signal;
   }
   beforeEach(fn) {
     this.beforeHooks.push(fn);
