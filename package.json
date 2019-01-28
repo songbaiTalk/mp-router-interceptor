@@ -1,6 +1,6 @@
 {
   "name": "mp-router-interceptor",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "为mpvue提供router插件，为push，replace，switchTab提供beforeEach，afterEach两个常用的路由守卫",
   "main": "./src/index.js",
   "scripts": {
