@@ -4,6 +4,8 @@ export default class mpvueRouter {
     this.beforeHooks = [];
     this.afterHooks = [];
     this.Class = this.constructor;
+    // 配置的路由
+    if (options) this.routesArr = options.routes;
   }
   /**
    * static方法，对class的static的方法，其this指向class，
@@ -79,7 +81,7 @@ export default class mpvueRouter {
       return false;
     } else {
       const routeObj = {
-        url: to["path"]
+        url: this.getPath(to)
       };
       adaptor(routeObj);
       this.Class._Vue.prototype.$route.params = to.params;
@@ -118,5 +120,23 @@ export default class mpvueRouter {
   }
   afterEach(fn) {
     this.afterHooks.push(fn);
+  }
+
+  // 根据to拿到对应的path
+  getPath(to) {
+    if (to.path) {
+      return to.path
+    } else if (to.name && this.routesArr) {
+      let path = '/404';
+      this.routesArr.some(item => {
+        if (item.name === to.name) {
+          path = item.path;
+          return true;
+        }
+        return false;
+      });
+      return path;
+    }
+    return '/404';
   }
 }
