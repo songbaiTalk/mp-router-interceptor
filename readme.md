@@ -20,4 +20,14 @@ const app = new Vue({
 this.$router.push({
   name: 'policyMain'
 })
+
+//使用路由守卫
+router.beforeEach(async (to, from, next)=>{
+    //do sth
+})
+
+router.afterEach(async (to, from)=>{
+    //do sth
+})
+
 ```
